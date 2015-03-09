@@ -1,7 +1,7 @@
 cnx-vagrant
 ===========
 
-Use vagrant to set up a virtual box development VM with:
+Use vagrant to set up a virtual box development virtual machine (VM) with:
 
  - `webview <https://github.com/Connexions/webview>`_
  - `cnx-archive <https://github.com/Connexions/cnx-archive>`_
@@ -31,6 +31,28 @@ services in the VM::
 
     vagrant ssh
     # TODO
+    sudo /etc/init.d/cnx-dev-vm restart
+
+CHECK VM STATUS
+---------------
+
+You can use ``vagrant status`` to check the status of the VM.  You'll see
+something similar to this::
+
+    Current machine states:
+
+    default                   running (virtualbox)
+
+    The VM is running. To stop this VM, you can run `vagrant halt` to
+    shut it down forcefully, or you can run `vagrant suspend` to simply
+    suspend the virtual machine. In either case, to restart it again,
+    simply run `vagrant up`.
+
+DELETE THE VM
+-------------
+
+If you don't want the VM anymore, you can do ``vagrant destroy`` in the
+directory with the Vagrantfile and it should remove the VM.
 
 USAGE
 -----

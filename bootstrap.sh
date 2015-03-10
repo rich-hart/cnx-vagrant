@@ -57,11 +57,11 @@ cd ../openstax-setup
 
 # Set up cnx packages
 cd
-if [ ! -d connexions-setup ]
+if [ ! -d cnx-setup ]
 then
-    git clone https://github.com/karenc/connexions-setup.git
+    git clone https://github.com/karenc/cnx-setup.git
 fi
-cd connexions-setup
+cd cnx-setup
 virtualenv .
 ./bin/pip install fabric fexpect
 
@@ -155,7 +155,7 @@ start_services() {
     cd /home/\$USER/openstax-setup
     sudo -u \$USER ./bin/fab -H localhost accounts_run_unicorn
     sleep 10  # wait for accounts to run
-    cd /home/\$USER/connexions-setup
+    cd /home/\$USER/cnx-setup
     sudo -u \$USER ./bin/fab -H localhost archive_run:bg=True
     sudo -u \$USER ./bin/fab -H localhost webview_run
     sudo -u \$USER ./bin/fab -H localhost publishing_run:bg=True

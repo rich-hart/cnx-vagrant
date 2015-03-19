@@ -106,5 +106,5 @@ machine, it's in ``~/VirtualBox VMs``)
 6. ``vagrant up``
 7. Go to http://10.11.12.13:8000/ for the cnx site.
 8. Follow this guide to upload the box to atlas.hashicorp.com:
-   https://vagrantcloud.com/docs/providers
+   https://vagrantcloud.com/docs/providers (look for ``UPLOAD A .BOX FOR PROVIDER``)
 9. Delete the local box: ``vagrant box remove karenc/cnx-dev-vm``

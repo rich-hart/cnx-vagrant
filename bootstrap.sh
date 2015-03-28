@@ -113,13 +113,6 @@ sed -i 's/port = 6543/port = 6544/' ~/cnx-publishing/development.ini
 
 # Set up Connexions/cnx-authoring
 ./bin/fab -H localhost authoring_setup:https=True
-# TODO remove this once the branch is merged to master
-cd ~/cnx-authoring
-if [ -n "`git branch -r | grep fix-access-control-allow-origin`" ]
-then
-    git checkout fix-access-control-allow-origin
-fi
-cd -
 cp ~/cnx-authoring/development.ini.example ~/cnx-authoring/development.ini
 
 # Link authoring to accounts

@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-# static ip
-ipaddr='10.11.12.13'
+# static ip is 10.11.12.13
+# we need to setup a fake domain name so google oauth works
+ipaddr='dev-vm.cnx.org'
+
+# Add fake domain name to /etc/hosts
+sudo sed -i 's/^127.0.0.1 .*/& dev-vm.cnx.org/' /etc/hosts
 
 # Install general packages
 sudo apt-get update
@@ -25,6 +29,11 @@ stricthostkeychecking no
 EOF
 fi
 
+# Set up a smtp server to send emails
+wget https://raw.github.com/karenc/cnx-vagrant/master/smtp_server.py
+chmod 755 smtp_server.py
+sudo ./smtp_server.py &
+
 # generate self-signed ssl certificate for accounts
 cd
 openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
@@ -44,13 +53,35 @@ virtualenv .
 
 # Set up openstax/accounts
 ./bin/fab -H localhost accounts_setup:https=True
+
+# Set up facebook and twitter app id and secret
+cat >../accounts/config/secret_settings.yml <<EOF
+secret_token: 'Hu7aghaiaiPai2ewAix8OoquNoa1cah4'
+
+smtp_settings:
+  address: 'localhost'
+  port: 25
+
+# Facebook OAuth API settings
+facebook_app_id: '114585082701'
+facebook_app_secret: '35b6df2c95b8e3bc7bcd46ce47b1ae02'
+
+# Twitter OAuth API settings
+twitter_consumer_key: 'wsSnMNS15nbJRDTqDCDc9IxVs'
+twitter_consumer_secret: '78OkKbqZbVSGOZcW7Uv6XyTJWKITepl4TeR7rawjkAsBR5pgZ8'
+
+# Google OAuth API settings
+google_client_id: '860946374358-7fvpoadjfpgr2c3d61gca4neatsuhb6a.apps.googleusercontent.com'
+google_client_secret: '7gr2AYXrs1GneoVm4mKjG98N'
+EOF
+
 ./bin/fab -H localhost accounts_run_unicorn
 ./bin/fab -H localhost accounts_create_admin_user
 
 # Create an app on accounts
 cd ../accounts
 . ~/.rvm/scripts/rvm
-app_uid_secret=`echo 'app = FactoryGirl.create :doorkeeper_application, :trusted, redirect_uri: "http://'$ipaddr':8080/callback"; puts "#{app.uid}:#{app.secret}"' | bundle exec rails console | tail -3 | head -1`
+app_uid_secret=`echo 'app = FactoryGirl.create :doorkeeper_application, :trusted, redirect_uri: "http://'$ipaddr':8080/callback http://'$ipaddr':6544/callback"; puts "#{app.uid}:#{app.secret}"' | bundle exec rails console | tail -3 | head -1`
 app_uid=${app_uid_secret/:*/}
 app_secret=${app_uid_secret/*:/}
 cd ../openstax-setup
@@ -93,7 +124,7 @@ then
 else
     sed -i "s%openstax_accounts.server_url = .*%openstax_accounts.server_url = https://$ipaddr:3000/%" ~/cnx-publishing/development.ini
 fi
-sed -i "s%openstax_accounts.application_url = .*%openstax_accounts.application_url = http://$ipaddr:8080/%" ~/cnx-publishing/development.ini
+sed -i "s%openstax_accounts.application_url = .*%openstax_accounts.application_url = http://$ipaddr:6544/%" ~/cnx-publishing/development.ini
 if [ -z "`grep openstax_accounts.application_id ~/cnx-publishing/development.ini`" ]
 then
     sed -i "/openstax_accounts.application_url/ a openstax_accounts.application_id = $app_uid" ~/cnx-publishing/development.ini
@@ -106,6 +137,8 @@ then
 else
     sed -i "s/openstax_accounts.application_secret = .*/openstax_accounts.application_secret = $app_secret/" ~/cnx-publishing/development.ini
 fi
+# Set up admin as a moderator in publishing
+sed -i "/openstax_accounts.groups.moderators/ a\  admin" ~/cnx-publishing/development.ini
 
 # Start publishing on another port, port 6544
 sed -i 's/port = 6543/port = 6544/' ~/cnx-publishing/development.ini
@@ -179,6 +212,6 @@ sudo chmod 755 /etc/init.d/cnx-dev-vm
 sudo update-rc.d cnx-dev-vm defaults
 
 # Set up ssh keys using the default insecure key
-wget --no-check-certificate https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub
+wget https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub
 cat vagrant.pub >>~/.ssh/authorized_keys
 rm vagrant.pub

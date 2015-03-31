@@ -187,6 +187,8 @@ start_services() {
     sudo -u \$USER ./bin/fab -H localhost webview_run
     sudo -u \$USER ./bin/fab -H localhost publishing_run:bg=True
     sudo -u \$USER ./bin/fab -H localhost authoring_run:bg=True
+    cd /home/\$USER
+    sudo /home/\$USER/smtp_server.py &
 }
 
 case "\$1" in

@@ -29,6 +29,18 @@ To download the cnx development VM from atlas.hashicorp.com:
 
 5. Go to http://dev-vm.cnx.org:8000/ for the cnx site.
 
+TAKE SNAPSHOT
+-------------
+
+To take a snapshot of the VM, for example before an upgrade, you can install
+``vagrant-vbox-snapshot``::
+
+    vagrant plugin install vagrant-vbox-snapshot
+
+To take a snapshot::
+
+    vagrant snapshot take "before-upgrade"
+
 UPDATE THE VM
 -------------
 

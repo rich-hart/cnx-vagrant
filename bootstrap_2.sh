@@ -35,10 +35,10 @@ fi
 
 
 # Set up a smtp server to send emails
-cd $DEPLOY_DIR
-wget https://raw.github.com/karenc/cnx-vagrant/master/smtp_server.py
-chmod 755 smtp_server.py
-./smtp_server.py &
+#cd $DEPLOY_DIR
+#wget https://raw.github.com/karenc/cnx-vagrant/master/smtp_server.py
+#chmod 755 smtp_server.py
+#./smtp_server.py &
 
 cd $DEPLOY_DIR
 openssl genrsa -des3 -passout pass:x -out server.pass.key 2048

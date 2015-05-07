@@ -12,21 +12,21 @@ ipaddr='dev-vm.cnx.org'
 sed -i 's/^127.0.0.1 .*/& dev-vm.cnx.org/' /etc/hosts
 
 # Install general packages
-sudo apt-get update
-sudo apt-get install --yes git python-virtualenv python-dev
+apt-get update
+apt-get install --yes git python-virtualenv python-dev
 
 # Generate ssh key
 if [ ! -d $DEPLOY_DIR/.ssh ]
 then
-    sudo mkdir $DEPLOY_DIR/.ssh
-    sudo chmod 700 $DEPLOY_DIR/.ssh
+    mkdir $DEPLOY_DIR/.ssh
+    chmod 700 $DEPLOY_DIR/.ssh
 fi
 
 if [ ! -e $DEPLOY_DIR/.ssh/localhost_id_rsa ]
 then
-    sudo ssh-keygen -N '' -f $DEPLOY_DIR/.ssh/localhost_id_rsa
-    sudo cat $DEPLOY_DIR/.ssh/localhost_id_rsa.pub >>$DEPLOY_DIR/.ssh/authorized_keys
-    sudo cat >>$DEPLOY_DIR/.ssh/config <<EOF
+    ssh-keygen -N '' -f $DEPLOY_DIR/.ssh/localhost_id_rsa
+    cat $DEPLOY_DIR/.ssh/localhost_id_rsa.pub >>$DEPLOY_DIR/.ssh/authorized_keys
+    cat >>$DEPLOY_DIR/.ssh/config <<EOF
 host localhost
 identityfile $DEPLOY_DIR/.ssh/localhost_id_rsa
 stricthostkeychecking no

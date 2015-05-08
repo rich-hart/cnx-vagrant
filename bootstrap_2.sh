@@ -13,8 +13,9 @@ sed -i 's/^127.0.0.1 .*/& dev-vm.cnx.org/' /etc/hosts
 
 # Install general packages
 apt-get update
-apt-get install --yes git python-virtualenv python-dev
+apt-get install --yes git python-virtualenv python-dev postgresql-9.3
 
+sudo -u postgres -i createuser -s vagrant
 # Generate ssh key
 if [ ! -d $DEPLOY_DIR/.ssh ]
 then

@@ -7,13 +7,13 @@ DEPLOY_DIR='/opt'
 # static ip is 10.11.12.13
 # we need to setup a fake domain name so google oauth works
 ipaddr='dev-vm.cnx.org'
-
+#git config --global user.name "rich-hart"
 # Add fake domain name to /etc/hosts
 sed -i 's/^127.0.0.1 .*/& dev-vm.cnx.org/' /etc/hosts
 
 # Install general packages
 apt-get update
-apt-get install --yes git python-virtualenv python-dev postgresql-9.3 python-pip
+apt-get install --yes git python-virtualenv python-dev postgresql-9.3 python-pip fabric
 
 pip install -U pip
 
@@ -56,7 +56,7 @@ cd $DEPLOY_DIR
 
 if [ ! -d openstax-setup ]
 then
-    git clone https://github.com/$BRANCH/openstax-setup.git
+    git clone https://github.com/rich-hart/openstax-setup.git
 fi
 cd $DEPLOY_DIR/openstax-setup
 
@@ -64,7 +64,7 @@ cd $DEPLOY_DIR/openstax-setup
 fab -H localhost accounts_setup:https=True
 
 # Set up facebook and twitter app id and secret
-cat >../accounts/config/secret_settings.yml <<EOF
+cat >$DEPLOY_DIR/accounts/config/secret_settings.yml <<EOF
 secret_token: 'Hu7aghaiaiPai2ewAix8OoquNoa1cah4'
 smtp_settings:
   address: 'localhost'
@@ -80,16 +80,19 @@ google_client_id: '860946374358-7fvpoadjfpgr2c3d61gca4neatsuhb6a.apps.googleuser
 google_client_secret: '7gr2AYXrs1GneoVm4mKjG98N'
 EOF
 
+cd $DEPLOY_DIR/openstax-setup
+
 fab -H localhost accounts_run_unicorn
 fab -H localhost accounts_create_admin_user
 
 # Create an app on accounts
-cd ../accounts
+cd $DEPLOY_DIR/accounts
 . $DEPLOY_DIR/.rvm/scripts/rvm
 app_uid_secret=`echo 'app = FactoryGirl.create :doorkeeper_application, :trusted, redirect_uri: "http://'$ipaddr':8080/callback http://'$ipaddr':6544/callback"; puts "#{app.uid}:#{app.secret}"' | bundle exec rails console | tail -3 | head -1`
 app_uid=${app_uid_secret/:*/}
 app_secret=${app_uid_secret/*:/}
-cd ../openstax-setup
+
+cd $DEPLOY_DIR/openstax-setup
 
 
 

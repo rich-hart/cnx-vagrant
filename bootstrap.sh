@@ -1,5 +1,25 @@
 #!/usr/bin/env bash
 
+# checklist
+
+# 1. have remote repos set up
+
+# create a .fabricrc file 
+
+# create a .profile file
+
+# a. all ~ are set to the .profile variable DEPLOY
+
+# b. env.cwd = '$DELPOY'
+
+# 2. have script to local download repos
+
+# 3. have script to create vm modify boostrap
+
+
+
+
+
 # static ip is 10.11.12.13
 # we need to setup a fake domain name so google oauth works
 ipaddr='dev-vm.cnx.org'

@@ -3,6 +3,7 @@
 
 
 DEPLOY_DIR='/opt'
+
 BRANCH=local_install
 REMOTE=rich-hart
 # static ip is 10.11.12.13
@@ -14,7 +15,7 @@ sed -i 's/^127.0.0.1 .*/& dev-vm.cnx.org/' /etc/hosts
 
 # Install general packages
 apt-get update
-apt-get install --yes git python-virtualenv python-dev postgresql-9.3 python-pip fabric
+apt-get install --yes git python-virtualenv python-dev postgresql-9.3 python-pip fabric bundler
 
 pip install -U pip
 

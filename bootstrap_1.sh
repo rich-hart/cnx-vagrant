@@ -3,7 +3,8 @@
 
 
 DEPLOY_DIR='/opt'
-
+BRANCH=local_install
+REMOTE=rich-hart
 # static ip is 10.11.12.13
 # we need to setup a fake domain name so google oauth works
 ipaddr='dev-vm.cnx.org'
@@ -13,7 +14,7 @@ sed -i 's/^127.0.0.1 .*/& dev-vm.cnx.org/' /etc/hosts
 
 # Install general packages
 apt-get update
-apt-get install --yes git python-virtualenv python-dev postgresql-9.3 python-pip
+apt-get install --yes git python-virtualenv python-dev postgresql-9.3 python-pip fabric
 
 pip install -U pip
 
@@ -56,7 +57,7 @@ cd $DEPLOY_DIR
 
 if [ ! -d openstax-setup ]
 then
-    git clone https://github.com/$BRANCH/openstax-setup.git
+    git clone -b $BRANCH --single-branch https://github.com/$REMOTE/openstax-setup.git
 fi
 cd $DEPLOY_DIR/openstax-setup
 

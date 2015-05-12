@@ -1,0 +1,11 @@
+DEPLOY_DIR = '/opt'
+cwd = DEPLOY_DIR
+use_ssh_config = True
+ssh_config_path = '../.ssh_config'
+LOCAL_WD = '/Users/openstax/workspace/cnx-vagrant'
+hosts = 'virtual_machine'
+ipaddr = 'dev-vm.cnx.org'
+WORKSPACE = '/Users/openstax/workspace'
+vm_name = 'cnx_vm'
+USER = 'rich'
+host_string = 'virtual_machine'

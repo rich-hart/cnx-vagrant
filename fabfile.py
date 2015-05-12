@@ -21,7 +21,8 @@ sh={'HOME':env.DEPLOY_DIR,
     'ipaddr':'dev-vm.cnx.org'}
 
 def test():
-    local("python -m ipdb setup.py test")
+    #local("python -m ipdb setup.py test -s test_fabfile.TestCNXVagrant.test_empty")
+    local("python -m ipdb setup.py test -s test_fabfile.TestCNXVagrant")
 
 
 

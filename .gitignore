@@ -1,3 +1,5 @@
 .vagrant
 *.pyc
 *.swp
+.pdbrc
+*egg-info

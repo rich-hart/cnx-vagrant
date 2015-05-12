@@ -30,8 +30,8 @@ class TestCNXVagrant(unittest.TestCase):
         """.format(**env)
         actual_status = local("vagrant status",capture=True)
         self.assertEqual(expected_status.split(),actual_status.split())
-        output = run("dpkg -s python-pip")
-        print(output)
+        # output = run("dpkg -s python-pip")
+        # print(output)
          
 #if __name__ == '__main__':
 #    unittest.main()

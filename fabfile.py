@@ -32,5 +32,6 @@ def create_vm():
 
 def package_vm():
     local("vagrant halt")
-    local("vagrant package --base {vm_name} --vagrantfile cnx-dev-vm-Vagrantfile".format(**env))
+    local("vagrant package --vagrantfile cnx-dev-vm-Vagrantfile".format(**env))
+    #local("vagrant package --base {vm_name} --vagrantfile cnx-dev-vm-Vagrantfile".format(**env))
     local("vagrant box add {USER}/cnx-dev-vm package.box".format(**env))
